@@ -1,0 +1,60 @@
+
+.footer {
+    background-color: #1a237e;
+    color: white;
+    padding: 48px 0;
+    margin-top: auto;
+  }
+  
+  .footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .footer-section {
+    margin-bottom: 24px;
+  }
+  
+  .footer-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  
+  .footer-links {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .footer-links a {
+    color: white;
+    text-decoration: none;
+    margin-bottom: 8px;
+    transition: color 0.3s ease;
+  }
+  
+  .footer-links a:hover {
+    color: #ffeb3b;
+  }
+  
+  .footer-icons {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+  }
+  
+  .footer-icons .MuiIconButton-root {
+    color: white;
+    transition: transform 0.3s ease;
+  }
+  
+  .footer-icons .MuiIconButton-root:hover {
+    transform: scale(1.1);
+  }
+  
+  .footer-copyright {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 0.9rem;
+  }
+  

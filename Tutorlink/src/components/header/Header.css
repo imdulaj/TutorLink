@@ -1,0 +1,27 @@
+.header-container {
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
+  }
+  
+  .header-icon {
+    color: #1a237e;
+    margin-right: 10px;
+  }
+  
+  .header-title {
+    color: #1a237e;
+    font-weight: 700;
+  }
+  
+  @media (max-width: 600px) {
+    .header-title {
+      display: none;
+    }
+  }
+  
+  .header-buttons {
+    display: flex;
+    gap: 16px;
+  }
+  
