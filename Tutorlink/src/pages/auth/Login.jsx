@@ -2,18 +2,39 @@ import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon, LogIn } from "lucide-react";
 import "./Login.css";
 import LoginImage from '../../assets/loginHero.jpg';
+import { Link, useNavigate } from "react-router-dom";
 
 export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", {
-      email,
-      password,
-    });
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        navigate("/home");
+      } else {
+        setError(data.message || "Invalid email or password.");
+      }
+    } catch (err) {
+      setError("Failed to connect to the server. Please try again later.");
+    }
   };
 
   return (
@@ -56,11 +77,7 @@ export function Login() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="password-toggle"
                 >
-                  {showPassword ? (
-                    <EyeOffIcon className="icon" />
-                  ) : (
-                    <EyeIcon className="icon" />
-                  )}
+                  {showPassword ? <EyeOffIcon className="icon" /> : <EyeIcon className="icon" />}
                 </button>
               </div>
             </div>
@@ -78,9 +95,9 @@ export function Login() {
             </button>
             <div className="help-text">
               New to TutorLink?{" "}
-              <a href="#" className="signup-link">
+              <Link to="/register" className="signup-link">
                 Create an account
-              </a>
+              </Link>
             </div>
           </form>
         </div>

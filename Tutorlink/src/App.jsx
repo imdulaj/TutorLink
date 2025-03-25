@@ -1,4 +1,3 @@
-
 import React from 'react';
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
@@ -10,19 +9,20 @@ import { Courses } from './pages/courses/Courses.jsx';
 import { Quiz } from './pages/quiz/Quiz.jsx';
 import { Materials } from './pages/Materials/Materials.jsx';
 
-
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Register />} />
-        <Route path="/login" element={<Login />} />
+        {/* Default route is the login page */}
+        <Route path="/" element={<Login />} />
+        {/* Route for registration */}
+        <Route path="/register" element={<Register />} />
+        {/* Other routes */}
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/courses" element={<Courses />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/materials" element={<Materials />} />
-
       </Routes>
     </BrowserRouter>
   );
