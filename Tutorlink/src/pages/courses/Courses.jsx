@@ -16,63 +16,20 @@ import {
     FaClock, 
     FaGraduationCap 
   } from 'react-icons/fa';
-  import { useState } from 'react';
+  import { useState, useEffect } from 'react';
   import './Courses.css';
-  import courseImg from '../../assets/courses.jpeg'
 import { Header } from '../../components/header/Header';
 import { Footer } from '../../components/footer/Footer';
   
   export function Courses() {
     
-    const initialCourses = [
-      {
-        id: 1,
-        title: "Complete physics practicals",
-        instructor: "samuel udayanga",
-        image: courseImg,
-        duration: "12 weeks",
-        level: "Intermediate",
-        rating: 4.5,
-        price: "LKR 3000",
-        description: "get well practice with physics practicals."
-      },
-      {
-        id: 2,
-        title: "Combined maths foundation",
-        instructor: "Prasanna Maheepala",
-        image: courseImg,
-        duration: "10 weeks",
-        level: "Beginner",
-        rating: 4.8,
-        price: "LKR 2000",
-        description: "get foundation for learn combined maths"
-      },
-      {
-        id: 3,
-        title: "Combined maths Master",
-        instructor: "Prasanna Maheepala",
-        image: courseImg,
-        duration: "8 weeks",
-        level: "Advanced",
-        rating: 4.6,
-        price: "LKR 5000",
-        description: "Master combined maths strategies."
-      },
-      {
-        id: 4,
-        title: "Marketing foundation",
-        instructor: "Asela mallikarathna",
-        image: courseImg,
-        duration: "14 weeks",
-        level: "Intermediate",
-        rating: 4.7,
-        price: "LKR 3000",
-        description: "Build strategies and learn marketing basics."
-      }
-    ];
-  
-    const [courses] = useState(initialCourses);
+    const [courses, setCourses] = useState([]);
     const [favorites, setFavorites] = useState([]);
+
+    useEffect(() => {
+      const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
+      setCourses(storedCourses);
+    }, []);
   
     const toggleFavorite = (courseId) => {
       setFavorites(prevFavorites => {
@@ -93,16 +50,15 @@ import { Footer } from '../../components/footer/Footer';
         </Typography>
   
         <Grid container spacing={4}>
-          {courses.map((course) => (
-            <Grid item xs={12} sm={6} md={4} key={course.id}>
+          {courses.map((course, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
               <Card className="course-card">
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={course.image}
-                  alt={course.title}
-                  className="course-image"
-                />
+                {course.video && (
+                  <video controls width="100%">
+                    <source src={course.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
                 <CardContent className="course-content">
                   <Box className="course-header">
                     <Typography variant="h6" className="course-title">
@@ -161,5 +117,4 @@ import { Footer } from '../../components/footer/Footer';
       
     );
   }
-  
-  
+

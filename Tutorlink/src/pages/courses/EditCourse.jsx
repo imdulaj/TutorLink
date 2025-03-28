@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Container,
   Paper,
@@ -9,11 +9,13 @@ import {
   Rating,
   Box
 } from '@mui/material';
-import { FaBook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaEdit } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
 import './AddCourse.css';
 
-const AddCourse = () => {
+const EditCourse = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
   const [courseData, setCourseData] = useState({
     title: '',
     instructor: '',
@@ -25,20 +27,29 @@ const AddCourse = () => {
     description: ''
   });
 
-  const navigate = useNavigate();
-
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
+
+  useEffect(() => {
+    const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
+    const courseToEdit = storedCourses[id];
+    if (courseToEdit) {
+      setCourseData(courseToEdit);
+    } else {
+      alert('Course not found!');
+      navigate('/ViewCourse');
+    }
+  }, [id, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCourseData(prevState => ({
+    setCourseData((prevState) => ({
       ...prevState,
       [name]: value
     }));
   };
 
   const handleRatingChange = (event, newValue) => {
-    setCourseData(prevState => ({
+    setCourseData((prevState) => ({
       ...prevState,
       rating: newValue
     }));
@@ -46,9 +57,10 @@ const AddCourse = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const existingCourses = JSON.parse(localStorage.getItem('courses')) || [];
-    localStorage.setItem('courses', JSON.stringify([...existingCourses, courseData]));
-    alert('Course added successfully!');
+    const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
+    storedCourses[id] = courseData;
+    localStorage.setItem('courses', JSON.stringify(storedCourses));
+    alert('Course updated successfully!');
     navigate('/ViewCourse');
   };
 
@@ -56,8 +68,8 @@ const AddCourse = () => {
     <Container className="add-course-container">
       <Paper elevation={3} className="form-paper">
         <Typography variant="h4" className="form-title">
-          <FaBook className="title-icon" />
-          Add New Course
+          <FaEdit className="title-icon" />
+          Edit Course
         </Typography>
 
         <form onSubmit={handleSubmit} className="course-form">
@@ -159,7 +171,7 @@ const AddCourse = () => {
             className="submit-btn"
             size="large"
           >
-            Add Course
+            Update Course
           </Button>
           <Button
             variant="outlined"
@@ -168,7 +180,7 @@ const AddCourse = () => {
             size="large"
             onClick={() => navigate('/ViewCourse')}
           >
-            View Courses
+            Cancel
           </Button>
         </form>
       </Paper>
@@ -176,4 +188,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;
+export default EditCourse;

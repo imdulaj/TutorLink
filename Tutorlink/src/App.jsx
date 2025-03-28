@@ -15,7 +15,7 @@ import ViewQuiz from './pages/quiz/ViewQuiz.jsx';
 import AddCourse from './pages/courses/AddCourse.jsx';
 import AddQuiz from './pages/quiz/AddQuiz.jsx';
 import AddMaterials from './pages/Materials/AddMaterials.jsx';
-
+import EditCourse from './pages/courses/EditCourse.jsx';
 
 function App() {
   return (
@@ -44,6 +44,7 @@ function App() {
     <Route path="/AddCourse" element={<AddCourse />} />
     <Route path="/AddQuiz" element={<AddQuiz />} />
     <Route path="/AddMaterials" element={<AddMaterials />} />
+    <Route path="/EditCourse/:id" element={<EditCourse />} />
   </Routes>
 </BrowserRouter>
 
