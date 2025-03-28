@@ -19,6 +19,8 @@ import {
   import { useState } from 'react';
   import './Courses.css';
   import courseImg from '../../assets/courses.jpeg'
+import { Header } from '../../components/header/Header';
+import { Footer } from '../../components/footer/Footer';
   
   export function Courses() {
     
@@ -83,7 +85,9 @@ import {
     };
   
     return (
+      <div>
       <Container component="main" maxWidth="lg" className="courses-container">
+        <Header />
         <Typography variant="h4" component="h1" className="courses-title">
           Available Courses
         </Typography>
@@ -150,7 +154,11 @@ import {
             </Grid>
           ))}
         </Grid>
+       
       </Container>
+      <Footer />
+      </div>
+      
     );
   }
   
