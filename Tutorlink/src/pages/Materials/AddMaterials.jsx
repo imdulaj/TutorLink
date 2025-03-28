@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
+import axios from "axios";
 import {
   Container,
   Paper,
@@ -6,59 +8,51 @@ import {
   Button,
   Typography,
   Box,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  IconButton
-} from '@mui/material';
-import { FaFileUpload, FaFilePdf, FaVideo, FaTimes } from 'react-icons/fa';
-import './AddMaterials.css';
+} from "@mui/material";
+import { FaFileUpload, FaFilePdf } from "react-icons/fa";
+import "./AddMaterials.css";
 
 const AddMaterials = () => {
-  const [materials, setMaterials] = useState([]);
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [file, setFile] = useState(null);
+  const navigate = useNavigate(); // Initialize navigate
 
   const handleFileChange = (e) => {
-    const files = Array.from(e.target.files);
-    
-    const newMaterials = files.map(file => ({
-      id: Math.random().toString(36).substr(2, 9),
-      title: title || file.name,
-      file: file,
-      size: formatFileSize(file.size),
-      type: file.type.includes('pdf') ? 'pdf' : 'video'
-    }));
-
-    setMaterials([...materials, ...newMaterials]);
-    setTitle('');
-    e.target.value = null; 
+    setFile(e.target.files[0]);
   };
 
-  const formatFileSize = (bytes) => {
-    if (bytes === 0) return '0 Bytes';
-    const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
-  const handleRemoveMaterial = (id) => {
-    setMaterials(materials.filter(material => material.id !== id));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Materials to upload:', materials);
-    
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("title", title);
+    formData.append("description", description);
+    formData.append("file", file);
+
+    try {
+      await axios.post("http://localhost:3000/api/materials/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      // Clear form fields
+      setTitle("");
+      setDescription("");
+      setFile(null);
+
+      // Navigate back to ViewMaterials page
+      navigate("/ViewMaterials");
+    } catch (error) {
+      console.error("Error uploading material:", error);
+    }
   };
 
   return (
     <Container className="add-materials-container">
       <Paper elevation={3} className="form-paper">
         <Typography variant="h4" className="form-title">
-          <FaFileUpload className="title-icon" />
-          Add Course Materials
+          <FaFileUpload className="title-icon" /> Add Course Materials
         </Typography>
 
         <form onSubmit={handleSubmit} className="materials-form">
@@ -68,7 +62,18 @@ const AddMaterials = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             margin="normal"
-            placeholder="Enter title (optional)"
+            placeholder="Enter title"
+          />
+
+          <TextField
+            fullWidth
+            label="Material Description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            margin="normal"
+            placeholder="Enter description"
+            multiline
+            rows={3}
           />
 
           <Box className="upload-section">
@@ -78,58 +83,12 @@ const AddMaterials = () => {
               startIcon={<FaFilePdf />}
               className="upload-btn"
             >
-              Upload PDF
-              <input
-                type="file"
-                hidden
-                accept=".pdf"
-                onChange={handleFileChange}
-              />
-            </Button>
-
-            <Button
-              variant="contained"
-              component="label"
-              startIcon={<FaVideo />}
-              className="upload-btn"
-            >
-              Upload Video
-              <input
-                type="file"
-                hidden
-                accept="video/*"
-                onChange={handleFileChange}
-              />
+              Upload File
+              <input type="file" hidden onChange={handleFileChange} />
             </Button>
           </Box>
 
-          <List className="materials-list">
-            {materials.map((material) => (
-              <ListItem
-                key={material.id}
-                className="material-item"
-                secondaryAction={
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => handleRemoveMaterial(material.id)}
-                  >
-                    <FaTimes />
-                  </IconButton>
-                }
-              >
-                <ListItemIcon>
-                  {material.type === 'pdf' ? <FaFilePdf /> : <FaVideo />}
-                </ListItemIcon>
-                <ListItemText
-                  primary={material.title}
-                  secondary={`Size: ${material.size}`}
-                />
-              </ListItem>
-            ))}
-          </List>
-
-          {materials.length > 0 && (
+          {file && (
             <Button
               type="submit"
               variant="contained"
@@ -137,7 +96,7 @@ const AddMaterials = () => {
               className="submit-btn"
               size="large"
             >
-              Upload Materials
+              Upload Material
             </Button>
           )}
         </form>
