@@ -1,0 +1,37 @@
+.dashboard {
+    padding: 2rem 0;
+  }
+  
+  .dashboard h1 {
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+  }
+  
+  .dashboard-card {
+    height: 100%;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .dashboard-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+  
+  .card-icon {
+    margin-bottom: 1rem;
+    color: #1976d2;
+  }
+  
+
+  @media (prefers-color-scheme: dark) {
+    .dashboard h1 {
+      color: #fff;
+    }
+    
+    .card-icon {
+      color: #90caf9;
+    }
+  }

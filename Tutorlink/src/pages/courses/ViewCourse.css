@@ -1,0 +1,36 @@
+.courses-container {
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+  }
+  
+  .add-button {
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  .courses-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .course-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+  }
+  
+  .course-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+  }
+  

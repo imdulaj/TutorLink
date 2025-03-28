@@ -23,6 +23,8 @@ import {
   import { useState } from 'react';
   import { FaCheckCircle, FaClock } from 'react-icons/fa';
   import './Quiz.css';
+  import { Header } from '../../components/header/Header';
+import { Footer } from '../../components/footer/Footer';
   
   export function Quiz() {
     const [activeQuiz, setActiveQuiz] = useState(null);
@@ -138,7 +140,9 @@ import {
   
     if (!activeQuiz) {
       return (
+       <div>
         <Container component="main" maxWidth="lg" className="quiz-container">
+           <Header />
           <Typography variant="h4" component="h1" className="quiz-title">
             Available Quizzes
           </Typography>
@@ -175,11 +179,16 @@ import {
             ))}
           </Box>
         </Container>
+        <Footer />
+        </div>
       );
     }
   
     return (
+      <div>
+       
       <Container component="main" maxWidth="md" className="quiz-container">
+      
         <Paper elevation={3} className="quiz-paper">
           <Typography variant="h5" className="active-quiz-title">
             {activeQuiz.title}
@@ -271,7 +280,11 @@ import {
           </DialogActions>
         </Dialog>
       </Container>
+      <Footer />
+      </div>
+      
     );
+    
   }
   
   

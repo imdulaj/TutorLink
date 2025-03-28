@@ -1,5 +1,7 @@
 import React from 'react';
 import '../../pages/Materials/Materials.css';
+import { Header } from '../../components/header/Header';
+import { Footer } from '../../components/footer/Footer';
 
 const materials = [
   {
@@ -48,7 +50,9 @@ function MaterialCard({ material }) {
 
 export function Materials() {
   return (
+    <div className='container'>
     <div className="materials-container">
+      <Header />
       <h1>Learning Materials</h1>
       <div className="materials-filters">
         <button className="filter-btn active">All</button>
@@ -60,7 +64,12 @@ export function Materials() {
           <MaterialCard key={material.id} material={material} />
         ))}
       </div>
+      
     </div>
+    <Footer />
+    </div>
+      
+    
   );
 }
 
