@@ -1,11 +1,13 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from "cors";
 import './database/db.js';
 import userRoutes from "./routes/user.js";
 import coursesRoutes from "./routes/courses.js";
 import adminRoutes from "./routes/admin.js";
-import materialRoutes from "./routes/material.js"
-import cors from "cors";
+import quizRoutes from './routes/quiz.js';
+
+
 
 dotenv.config();
 const app = express();
@@ -21,12 +23,11 @@ app.get('/', (req, res) => {
   res.send('Hello World!');
 });
 
+app.use(cors());
 app.use('/api', userRoutes);
 app.use('/api', coursesRoutes);
 app.use('/api', adminRoutes);
-app.use("/api", materialRoutes);
-
-
+app.use('/api/quizzes', quizRoutes);
 
 
 app.listen(port, () => {
