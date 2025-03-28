@@ -15,6 +15,7 @@ import ViewQuiz from './pages/quiz/ViewQuiz.jsx';
 import AddCourse from './pages/courses/AddCourse.jsx';
 import AddQuiz from './pages/quiz/AddQuiz.jsx';
 import AddMaterials from './pages/Materials/AddMaterials.jsx';
+import { UpdateUser } from './pages/auth/UpdateUser.jsx';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
     <Route path="/courses" element={<Courses />} />
     <Route path="/quiz" element={<Quiz />} />
     <Route path="/materials" element={<Materials />} />
+    <Route path="/UpdateUser" element={<UpdateUser />} />
     
     {/* Admin routes (Dashboard and management) */}
     <Route path="/dashboard" element={<Dashboard />} />

@@ -24,6 +24,8 @@ app.use('/api', userRoutes);
 app.use('/api', coursesRoutes);
 app.use('/api', adminRoutes);
 
+
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
