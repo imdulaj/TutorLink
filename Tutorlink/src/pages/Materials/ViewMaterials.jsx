@@ -1,64 +1,93 @@
-import React, { useState } from "react";
-import { Button, Card, CardContent, IconButton } from "@mui/material";
-import { FaEdit, FaTrash } from "react-icons/fa";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import {
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Typography,
+  Container,
+} from "@mui/material";
+import { FaEdit, FaTrash, FaFilePdf, FaVideo } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 import "./ViewMaterials.css";
-import { Link } from "react-router-dom";
 
-const ViewMaterials= () => {
-  const [courses, setCourses] = useState([
-    { id: 1, name: "material Basics" },
-    { id: 2, name: "Node.js Fundamentals" },
-    { id: 3, name: "MongoDB Essentials" },
-  ]);
+const ViewMaterials = () => {
+  const [materials, setMaterials] = useState([]);
+  const navigate = useNavigate();
 
-  const handleDelete = (id) => {
-    setCourses(courses.filter((course) => course.id !== id));
-  };
+  // Fetch materials when component mounts
+  useEffect(() => {
+    fetchMaterials();
+  }, []);
 
-  const handleUpdate = (id) => {
-    const newName = prompt("Enter new course name:");
-    if (newName) {
-      setCourses(
-        courses.map((course) =>
-          course.id === id ? { ...course, name: newName } : course
-        )
-      );
+  const fetchMaterials = async () => {
+    try {
+      const response = await axios.get("http://localhost:3000/api/materials");
+      setMaterials(response.data);
+    } catch (error) {
+      console.error("Error fetching materials:", error);
     }
   };
 
-  const handleAdd = () => {
-    const newName = prompt("Enter course name:");
-    if (newName) {
-      const newCourse = { id: Date.now(), name: newName };
-      setCourses([...courses, newCourse]);
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3000/api/materials/${id}`);
+      fetchMaterials(); // Reload the materials list after deletion
+    } catch (error) {
+      console.error("Error deleting material:", error);
     }
+  };
+
+  const handleEdit = (id) => {
+    // Navigating to the update page with the material ID
+    navigate(`/updateMaterials/${id}`);
   };
 
   return (
-    <div className="courses-container">
-      <Link to="/AddMaterials"><Button variant="contained" color="primary"  className="add-button">
-        Add New
-      </Button>
+    <Container className="view-materials-container">
+      <Link to="/AddMaterials">
+        <Button variant="contained" color="primary" className="add-button">
+          Add New Material
+        </Button>
       </Link>
 
-      <div className="courses-list">
-        {courses.map((course) => (
-          <Card key={course.id} className="course-card">
-            <CardContent className="course-content">
-              <span>{course.name}</span>
-              <div className="action-buttons">
-                <IconButton color="primary" onClick={() => handleUpdate(course.id)}>
-                  <FaEdit />
-                </IconButton>
-                <IconButton color="secondary" onClick={() => handleDelete(course.id)}>
-                  <FaTrash />
-                </IconButton>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+      <div className="materials-list">
+        {materials.length === 0 ? (
+          <Typography variant="h6">No materials uploaded yet.</Typography>
+        ) : (
+          materials.map((material) => (
+            <Card key={material._id} className="material-card">
+              <CardContent className="material-content">
+                <div className="icon">
+                  {material.fileType === "pdf" ? <FaFilePdf /> : <FaVideo />}
+                </div>
+                <div>
+                  <Typography variant="h6">{material.title}</Typography>
+                  <Typography variant="body2">{material.description}</Typography>
+                  <Typography variant="body2">Size: {material.fileSize}</Typography>
+                  <a
+                    href={`http://localhost:3000/${material.filePath}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Download
+                  </a>
+                </div>
+                <div className="action-buttons">
+                  <IconButton color="primary" onClick={() => handleEdit(material._id)}>
+                    <FaEdit />
+                  </IconButton>
+                  <IconButton color="secondary" onClick={() => handleDelete(material._id)}>
+                    <FaTrash />
+                  </IconButton>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
-    </div>
+    </Container>
   );
 };
 
