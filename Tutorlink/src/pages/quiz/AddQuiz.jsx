@@ -1,103 +1,144 @@
 import React, { useState } from 'react';
-import {
-  Container,
-  Paper,
-  TextField,
-  Button,
-  Typography,
-} from '@mui/material';
-import { FaQuestionCircle } from 'react-icons/fa';
+import axios from 'axios';
 import './AddQuiz.css';
+import { Link } from 'react-router-dom';
 
 const AddQuiz = () => {
-  const [quizData, setQuizData] = useState({
-    title: '',
+  const [quiz, setQuiz] = useState({
+    quizID: '',
+    stream: '',
     duration: '',
-    totalQuestions: '',
-    description: ''
+    closingDate: '',
+    questions: [{ question: '', answers: ['', '', '', ''], correctAnswer: '' }],
   });
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setQuizData(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+  const handleChange = (e, index, field) => {
+    const newQuiz = { ...quiz };
+    if (field === 'question' || field === 'correctAnswer') {
+      newQuiz.questions[index][field] = e.target.value;
+    } else if (field === 'answers') {
+      newQuiz.questions[index].answers[e.target.dataset.index] = e.target.value;
+    } else {
+      newQuiz[e.target.name] = e.target.value;
+    }
+    setQuiz(newQuiz);
   };
 
-  const handleSubmit = (e) => {
+  const addQuestion = () => {
+    setQuiz({ ...quiz, questions: [...quiz.questions, { question: '', answers: ['', '', '', ''], correctAnswer: '' }] });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Quiz Data:', quizData);
-   
+    try {
+      await axios.post('http://localhost:3000/api/quizzes/create', quiz);
+      alert('Quiz added successfully');
+      setQuiz({
+        quizID: '',
+        stream: '',
+        duration: '',
+        closingDate: '',
+        questions: [{ question: '', answers: ['', '', '', ''], correctAnswer: '' }],
+      });
+    } catch (error) {
+      console.error(error);
+      alert('Error adding quiz');
+    }
+  };
+
+  // Function for the View Quiz button
+  const viewQuiz = () => {
+    navigate('/ViewQuiz'); 
   };
 
   return (
-    <Container className="add-quiz-container">
-      <Paper elevation={3} className="form-paper">
-        <Typography variant="h4" className="form-title">
-          <FaQuestionCircle className="title-icon" />
-          Add New Quiz
-        </Typography>
-
-        <form onSubmit={handleSubmit} className="quiz-form">
-          <TextField
-            fullWidth
-            label="Quiz Title"
-            name="title"
-            value={quizData.title}
+    <div className="add-quiz-container">
+      <div className="form-paper">
+        <h2 className="form-title">
+          <span className="title-icon">📝</span> Add New Quiz
+        </h2>
+        <form className="quiz-form" onSubmit={handleSubmit}>
+          <Link to='/ViewQuiz'><button type="button" onClick={viewQuiz} className="view-quiz-btn">
+            View Quiz
+          </button></Link>
+          <input
+            type="text"
+            name="quizID"
+            placeholder="Quiz ID"
+            value={quiz.quizID}
             onChange={handleChange}
+            className="input-field"
             required
-            margin="normal"
           />
-
-          <TextField
-            fullWidth
-            label="Duration (in minutes)"
+          <input
+            type="text"
+            name="stream"
+            placeholder="Stream"
+            value={quiz.stream}
+            onChange={handleChange}
+            className="input-field"
+            required
+          />
+          <input
+            type="number"
             name="duration"
-            type="number"
-            value={quizData.duration}
+            placeholder="Duration (mins)"
+            value={quiz.duration}
             onChange={handleChange}
+            className="input-field"
             required
-            margin="normal"
-            inputProps={{ min: 1 }}
+          />
+          <input
+            type="date"
+            name="closingDate"
+            value={quiz.closingDate}
+            onChange={handleChange}
+            className="input-field"
+            required
           />
 
-          <TextField
-            fullWidth
-            label="Total Questions"
-            name="totalQuestions"
-            type="number"
-            value={quizData.totalQuestions}
-            onChange={handleChange}
-            required
-            margin="normal"
-            inputProps={{ min: 1 }}
-          />
+            {quiz.questions.map((q, index) => (
+              <div key={index} className="question-section">
+                <input
+                  type="text"
+                  placeholder="Question"
+                  value={q.question}
+                  onChange={(e) => handleChange(e, index, 'question')}
+                  className="input-field question-input" // added new class for question input styling
+                  required
+                />
+                {q.answers.map((answer, i) => (
+                  <input
+                    key={i}
+                    type="text"
+                    data-index={i}
+                    placeholder={`Answer ${i + 1}`}
+                    value={answer}
+                    onChange={(e) => handleChange(e, index, 'answers')}
+                    className="input-field answer-input" // added new class for answer inputs styling
+                    required
+                  />
+                ))}
+                <input
+                  type="text"
+                  placeholder="Correct Answer"
+                  value={q.correctAnswer}
+                  onChange={(e) => handleChange(e, index, 'correctAnswer')}
+                  className="input-field"
+                  required
+                />
+              </div>
+            ))}
 
-          <TextField
-            fullWidth
-            label="Description"
-            name="description"
-            value={quizData.description}
-            onChange={handleChange}
-            required
-            margin="normal"
-            multiline
-            rows={4}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="submit-btn"
-            size="large"
-          >
-            Create Quiz
-          </Button>
+          <button type="button" onClick={addQuestion} className="add-question-btn">
+            Add Question
+          </button>
+          <button type="submit" className="submit-btn">
+            Submit
+          </button>
         </form>
-      </Paper>
-    </Container>
+      </div>
+    </div>
   );
 };
 
