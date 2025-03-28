@@ -38,31 +38,6 @@ export const register = async (req, res) => {
   }
 };
 
-// export const loginUser = async (req, res) => {
-//   try {
-//     const { email, password } = req.body;
-
-//     // Check if user exists
-//     const user = await User.findOne({ email });
-//     if (!user) {
-//       return res.status(400).json({ message: "Invalid email or password" });
-//     }
-
-//     // Compare password
-//     const isMatch = await bcrypt.compare(password, user.password);
-//     if (!isMatch) {
-//       return res.status(400).json({ message: "Invalid email or password" });
-//     }
-
-//     // Generate JWT token
-//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
-//     res.status(200).json({ message: "Login successful", token, user });
-//   } catch (error) {
-//     console.error("Login error:", error);
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
-
 
 
 
@@ -104,3 +79,69 @@ export const myProfile = TryCatch(async (req, res) => {
 
   res.json({ user });
 });
+
+
+
+
+export const getProfile = async (req, res) => {
+  try {
+    const userId = req.user._id; // Extract user ID from the token (verified by the isAuth middleware)
+
+    const user = await User.findById(userId).select('-password'); // Fetch the user from the DB
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json(user); // Send the user data as response
+  } catch (error) {
+    console.error("Get Profile Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
+
+
+export const updateProfile = async (req, res) => {
+  try {
+      const userId = req.user._id;
+      const { name, email, contactNumber } = req.body;
+
+      const user = await User.findById(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      user.name = name || user.name;
+      user.email = email || user.email;
+      user.contactNumber = contactNumber || user.contactNumber;
+
+      await user.save();
+      res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (error) {
+      console.error("Update Profile Error:", error);
+      res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
+
+
+
+
+
+export const deleteProfile = async (req, res) => {
+  try {
+    const userId = req.user._id; // Get the user ID from the JWT token (provided via middleware)
+
+    // Find and delete the user from the database
+    const user = await User.findByIdAndDelete(userId);
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Return success message after deletion
+    res.status(200).json({ message: "Account deleted successfully" });
+  } catch (error) {
+    console.error("Delete Profile Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
