@@ -1,36 +1,102 @@
-.courses-container {
-    max-width: 400px;
-    margin: auto;
-    text-align: center;
-  }
-  
-  .add-button {
+.container {
+  width: 95%;
+  margin: auto;
+  padding: 30px;
+  background: linear-gradient(145deg, #ffffff, #f0f2f5);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 25px;
+  color: #2c3e50;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.button-container a button {
+  padding: 10px 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  transition: transform 0.2s ease;
+}
+
+.button-container a button:hover {
+  transform: translateY(-2px);
+}
+
+.table-container {
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+.table-container table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: white;
+}
+
+.table-container th {
+  background: linear-gradient(45deg, #1a237e, #3949ab);
+  color: white;
+  padding: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.table-container td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.table-container tr:hover {
+  background-color: #f5f9ff;
+  transition: background-color 0.2s ease;
+}
+
+.no-courses {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+  padding: 40px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  margin-top: 20px;
+}
+
+.icon-button {
+  margin: 0 5px;
+  transition: transform 0.2s ease;
+}
+
+.icon-button:hover {
+  transform: scale(1.2);
+}
+
+video {
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .container {
     width: 100%;
-    margin-bottom: 15px;
+    padding: 15px;
   }
   
-  .courses-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .title {
+    font-size: 24px;
   }
-  
-  .course-card {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-  }
-  
-  .course-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 8px;
-  }
-  
+}
