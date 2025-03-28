@@ -1,11 +1,16 @@
 import express from "express";
-import {register,  loginUser, myProfile} from "../controllers/user.js"
-import { isAuth } from "../middleware/isAuth.js";
+import { register, loginUser, myProfile } from "../controllers/user.js";
+import { isAuth } from "../middleware/isAuth.js"; 
 
 const router = express.Router();
 
-router.post('/user/register', register);
-router.post("/user/login",loginUser);
-router.get("/user/me",isAuth, myProfile);
+// User Registration Route
+router.post("/user/register", register);
+
+// User Login Route
+router.post("/user/login", loginUser);
+
+// Get User Profile (Protected Route)
+router.get("/user/me", isAuth, myProfile);
 
 export default router;

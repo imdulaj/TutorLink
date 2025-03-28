@@ -3,57 +3,101 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import TryCatch from "../middleware/TryCatch.js";
 
-export const register = TryCatch(async (req, res) => {
-  const { email, name, password, registrationNumber, contactNumber, stream } = req.body;
+export const register = async (req, res) => {
+  try {
+    const { email, name, password, registrationNumber, contactNumber, stream } = req.body;
 
-  let user = await User.findOne({ email });
-  if (user)
-    return res.status(400).json({
-      message: "User already exists",
+    // Check for missing fields
+    if (!email || !name || !password || !registrationNumber || !contactNumber || !stream) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Check if the user already exists
+    let user = await User.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "User already exists" });
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    user = await User.create({
+      name,
+      email,
+      password: hashedPassword,
+      registrationNumber,
+      contactNumber,
+      stream,
     });
 
-  const hashPassword = await bcrypt.hash(password, 10);
+    res.status(201).json({ message: "User registered successfully" });
+  } catch (error) {
+    console.error("Registration Error:", error);
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+};
 
-  user = await User.create({
-    name,
-    email,
-    password: hashPassword,
-    registrationNumber,
-    contactNumber,
-    stream,
-  });
+// export const loginUser = async (req, res) => {
+//   try {
+//     const { email, password } = req.body;
 
-  res.status(201).json({
-    message: "User registered successfully",
-    user,
-  });
-});
+//     // Check if user exists
+//     const user = await User.findOne({ email });
+//     if (!user) {
+//       return res.status(400).json({ message: "Invalid email or password" });
+//     }
 
-export const loginUser = TryCatch(async (req, res) => {
+//     // Compare password
+//     const isMatch = await bcrypt.compare(password, user.password);
+//     if (!isMatch) {
+//       return res.status(400).json({ message: "Invalid email or password" });
+//     }
+
+//     // Generate JWT token
+//     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+//     res.status(200).json({ message: "Login successful", token, user });
+//   } catch (error) {
+//     console.error("Login error:", error);
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
+
+
+
+
+export const loginUser = async (req, res) => {
   const { email, password } = req.body;
-  const user = await User.findOne({ email });
 
-  if (!user)
-    return res.status(400).json({
-      message: "No user found with this email",
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    // Ensure role is sent
+    const token = jwt.sign({ id: user._id, role: user.role }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
     });
 
-  const matchPassword = await bcrypt.compare(password, user.password);
-  if (!matchPassword)
-    return res.status(400).json({
-      message: "Wrong password",
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      role: user.role, // ✅ Ensure role is included
     });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-  const token = jwt.sign({ _id: user._id }, process.env.Jwt_Sec, {
-    expiresIn: "15d",
-  });
 
-  res.json({
-    message: `Welcome back ${user.name}`,
-    token,
-    user,
-  });
-});
 
 export const myProfile = TryCatch(async (req, res) => {
   const user = await User.findById(req.user._id);

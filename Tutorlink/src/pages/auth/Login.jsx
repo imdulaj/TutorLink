@@ -1,19 +1,50 @@
 import React, { useState } from "react";
 import { EyeIcon, EyeOffIcon, LogIn } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 import "./Login.css";
-import LoginImage from '../../assets/loginHero.jpg';
+import LoginImage from "../../assets/loginHero.jpg";
 
 export function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login attempt with:", {
-      email,
-      password,
-    });
+    setError("");
+
+    try {
+      const response = await fetch("http://localhost:3000/api/user/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+      console.log("Login Response:", data); // Debugging
+
+      if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("role", data.role);
+        
+        // Ensure role is correctly retrieved
+        const storedRole = localStorage.getItem("role");
+        console.log("Stored Role:", storedRole); // Debugging
+        
+        // Redirect based on role
+        if (storedRole && storedRole.trim() === "admin") {
+          navigate("/dashboard");
+        } else {
+          navigate("/home");
+        }
+      } else {
+        setError(data.message || "Invalid email or password.");
+      }
+    } catch (err) {
+      setError("Failed to connect to the server. Please try again later.");
+    }
   };
 
   return (
@@ -56,41 +87,20 @@ export function Login() {
                   onClick={() => setShowPassword(!showPassword)}
                   className="password-toggle"
                 >
-                  {showPassword ? (
-                    <EyeOffIcon className="icon" />
-                  ) : (
-                    <EyeIcon className="icon" />
-                  )}
+                  {showPassword ? <EyeOffIcon className="icon" /> : <EyeIcon className="icon" />}
                 </button>
               </div>
             </div>
-            <div className="form-actions">
-              <div className="remember-me">
-                <input type="checkbox" id="remember" />
-                <label htmlFor="remember">Remember me</label>
-              </div>
-              <a href="#" className="forgot-password">
-                Forgot Password?
-              </a>
-            </div>
-            <button type="submit" className="login-button">
-              Sign In
-            </button>
+            <button type="submit" className="login-button">Sign In</button>
+            {error && <p className="error-text">{error}</p>}
             <div className="help-text">
-              New to TutorLink?{" "}
-              <a href="#" className="signup-link">
-                Create an account
-              </a>
+              New to TutorLink? <Link to="/register" className="signup-link">Create an account</Link>
             </div>
           </form>
         </div>
       </div>
       <div className="login-image">
-        <img
-          src={LoginImage}
-          alt="Students collaborating in a modern learning environment"
-          className="side-image"
-        />
+        <img src={LoginImage} alt="Login Illustration" className="side-image" />
       </div>
     </div>
   );
