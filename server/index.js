@@ -4,6 +4,7 @@ import './database/db.js';
 import userRoutes from "./routes/user.js";
 import coursesRoutes from "./routes/courses.js";
 import adminRoutes from "./routes/admin.js";
+import materialRoutes from "./routes/material.js"
 import cors from "cors";
 
 dotenv.config();
@@ -23,6 +24,8 @@ app.get('/', (req, res) => {
 app.use('/api', userRoutes);
 app.use('/api', coursesRoutes);
 app.use('/api', adminRoutes);
+app.use("/api", materialRoutes);
+
 
 
 

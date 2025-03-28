@@ -15,6 +15,7 @@ import ViewQuiz from './pages/quiz/ViewQuiz.jsx';
 import AddCourse from './pages/courses/AddCourse.jsx';
 import AddQuiz from './pages/quiz/AddQuiz.jsx';
 import AddMaterials from './pages/Materials/AddMaterials.jsx';
+import UpdateMaterials from './pages/Materials/UpdateMaterials.jsx';
 import { UpdateUser } from './pages/auth/UpdateUser.jsx';
 
 
@@ -46,6 +47,7 @@ function App() {
     <Route path="/AddCourse" element={<AddCourse />} />
     <Route path="/AddQuiz" element={<AddQuiz />} />
     <Route path="/AddMaterials" element={<AddMaterials />} />
+    <Route path="/updateMaterials/:id" element={<UpdateMaterials />} />
   </Routes>
 </BrowserRouter>
 
