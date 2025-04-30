@@ -9,11 +9,12 @@
 
 .form-paper {
   padding: 2rem;
-  width: 100%;
+  width: 90%; /* Ensures form is properly contained */
   max-width: 800px;
   background: #ffffff; /* White background for the form */
   border-radius: 8px; /* Rounded corners */
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  box-sizing: border-box;
 }
 
 .form-title {
@@ -36,17 +37,32 @@
 }
 
 .input-field {
+  width: 100%; /* Ensures fields don't overflow */
+  max-width: 600px; /* Adjusts max width for a balanced layout */
   padding: 0.8rem;
   font-size: 1rem;
   border: 1px solid #ddd;
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   transition: border-color 0.3s, box-shadow 0.3s;
+  box-sizing: border-box;
 }
 
 .input-field:focus {
   border-color: #1976d2;
   box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
+}
+
+/* Fix alignment issues for fields */
+.input-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.input-group .input-field {
+  flex: 1;
+  min-width: 250px;
 }
 
 .question-section {
@@ -94,6 +110,11 @@
 
   .input-field {
     font-size: 0.9rem;
+    max-width: 100%;
+  }
+
+  .input-group {
+    flex-direction: column;
   }
 
   .add-question-btn, .submit-btn {
@@ -114,6 +135,7 @@
 .view-quiz-btn:hover {
   background-color: #45a049;
 }
+
 /* Increased width for the question input */
 .question-input {
   width: 100%; /* Make the question input fill the available width */
@@ -125,19 +147,3 @@
   width: 100%; /* Ensure answer inputs fill available width */
   margin-bottom: 1rem; /* Added space between answer fields */
 }
-
-/* Optional: Adjust margins/paddings to make everything more readable */
-.input-field {
-  padding: 0.8rem;
-  font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-.input-field:focus {
-  border-color: #1976d2;
-  box-shadow: 0 0 5px rgba(25, 118, 210, 0.3);
-}
-

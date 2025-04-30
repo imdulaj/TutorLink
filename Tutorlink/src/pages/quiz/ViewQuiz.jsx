@@ -93,17 +93,13 @@ const ViewQuiz = () => {
         y += 8;
       });
   
-      // Correct answer
-      doc.setFont("helvetica", "bold");
-      doc.setTextColor(0, 128, 0); // Green color for correct answer
-      doc.text(`Correct Answer: ${q.correctAnswer}`, 20, y);
-      doc.setTextColor(0, 0, 0); // Reset color to black
-      y += 15;
+      y += 10; // Extra space before the next question
     });
   
     // Save the PDF with a proper name
     doc.save(`Quiz_${quiz.quizID}.pdf`);
   };
+  
   
 
   return (
