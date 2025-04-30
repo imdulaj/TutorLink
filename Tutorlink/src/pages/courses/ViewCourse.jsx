@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import { Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from "@mui/material";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./ViewCourse.css";
 
 const ViewCourse = () => {
   const [courses, setCourses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     const storedCourses = JSON.parse(localStorage.getItem("courses")) || [];
@@ -18,16 +19,35 @@ const ViewCourse = () => {
     localStorage.setItem("courses", JSON.stringify(updatedCourses));
   };
 
+  const filteredCourses = courses.filter((course) =>
+    [course.title, course.description, course.instructor].some((field) =>
+      field?.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  );
+
   return (
     <div className="container">
       <h2 className="title">Course List</h2>
+      <div className="search-container">
+        <TextField
+          label="Search Courses"
+          variant="outlined"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="search-input"
+          fullWidth
+          InputProps={{
+            style: { borderRadius: "8px" },
+          }}
+        />
+      </div>
       <div className="button-container">
         <Link to="/AddCourse">
           <Button variant="contained" color="success">+ Create New Course</Button>
         </Link>
       </div>
 
-      {courses.length > 0 ? (
+      {filteredCourses.length > 0 ? (
         <TableContainer component={Paper} className="table-container">
           <Table>
             <TableHead>
@@ -43,7 +63,7 @@ const ViewCourse = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {courses.map((course, index) => (
+              {filteredCourses.map((course, index) => (
                 <TableRow key={index}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>
@@ -74,7 +94,7 @@ const ViewCourse = () => {
           </Table>
         </TableContainer>
       ) : (
-        <p className="no-courses">No courses available.</p>
+        <p className="no-courses">No courses found.</p>
       )}
     </div>
   );
