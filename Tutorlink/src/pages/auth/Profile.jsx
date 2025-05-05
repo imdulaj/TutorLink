@@ -49,7 +49,7 @@ export function Profile() {
   }, []);
 
   const handleUpdateProfile = () => {
-    console.log("Update profile clicked");
+    navigate("/UpdateUser", { state: { studentData } });
     // Logic for updating the profile can be added here
   };
 
@@ -167,6 +167,7 @@ export function Profile() {
               Update Details
             </Button>
           </Link>
+
           <Button
             variant="outlined"
             startIcon={<FaTrash />}
