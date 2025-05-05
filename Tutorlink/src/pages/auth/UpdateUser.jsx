@@ -1,134 +1,128 @@
-import {
-  Container,
-  Box,
-  Typography,
-  Paper,
-  Avatar,
-  Grid,
-  Button,
-  Divider,
-  TextField,
+import { 
+    Container, 
+    Box, 
+    Typography, 
+    Paper, 
+    Avatar, 
+    Grid, 
+    Button, 
+    Divider, 
+    TextField 
 } from '@mui/material';
 import { FaUser, FaPencilAlt } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 export function UpdateUser() {
-  const [user, setUser] = useState({
-    name: '',
-    email: '',
-    contactNumber: '',
-  });
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        contactNumber: ""
+    });
 
-  const navigate = useNavigate();
+    const navigate = useNavigate(); // Initialize navigate
 
-  useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const token = localStorage.getItem('token');
+    // Fetch user profile data when the component loads
+    useEffect(() => {
+        const fetchProfile = async () => {
+            try {
+                const token = localStorage.getItem("token"); // Ensure token is stored
+                const response = await axios.get("http://localhost:3000/api/profile", {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setUser(response.data); // Update state with user data
+            } catch (error) {
+                console.error("Fetch profile error:", error);
+                alert("Failed to load profile.");
+            }
+        };
+        fetchProfile();
+    }, []);
 
-        if (!token) {
-          alert('No token found. Please log in again.');
-          navigate('/login');
-          return;
-        }
-
-        const response = await axios.get('http://localhost:3000/api/profile', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-
-        setUser(response.data);
-      } catch (error) {
-        console.error('Fetch profile error:', error);
-        alert(error.response?.data?.message || 'Failed to load profile.');
-      }
+    // Handle input changes
+    const handleChange = (e) => {
+        setUser({ ...user, [e.target.name]: e.target.value });
     };
 
-    fetchProfile();
-  }, [navigate]);
+    // Handle profile update
+    const handleUpdateProfile = async () => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await axios.put("http://localhost:3000/api/profile", user, {
+                headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
+            });
 
-  const handleChange = (e) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
+            console.log("Profile updated:", response.data);
+            alert("Profile updated successfully!");
 
-  const handleUpdateProfile = async () => {
-    try {
-      const token = localStorage.getItem('token');
+            // After successful update, navigate to profile page
+            navigate("/profile"); // Redirect to profile page
+        } catch (error) {
+            console.error("Update profile error:", error);
+            alert(error.response?.data?.message || "Failed to update profile.");
+        }
+    };
 
-      if (!token) {
-        alert('No token found. Please log in again.');
-        navigate('/login');
-        return;
-      }
+    return (
+        <Container component="main" maxWidth="md" className="update-container">
+            <Paper elevation={3} className="profile-paper">
+                <Box className="profile-header">
+                    <Avatar className="profile-avatar">
+                        <FaUser size={40} />
+                    </Avatar>
+                    <Typography variant="h4" className="profile-name">
+                        Student Profile
+                    </Typography>
+                </Box>
 
-      const response = await axios.put('http://localhost:3000/api/profile', user, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      });
+                <Divider className="profile-divider" />
 
-      alert('Profile updated successfully!');
-      navigate('/profile');
-    } catch (error) {
-      console.error('Update profile error:', error);
-      alert(error.response?.data?.message || 'Failed to update profile.');
-    }
-  };
+                <Grid container spacing={3} className="profile-form">
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Name"
+                            name="name"
+                            value={user.name}
+                            onChange={handleChange}
+                            className="profile-input"
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Email"
+                            name="email"
+                            value={user.email}
+                            onChange={handleChange}
+                            className="profile-input"
+                        />
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <TextField
+                            fullWidth
+                            label="Contact Number"
+                            name="contactNumber"
+                            value={user.contactNumber}
+                            onChange={handleChange}
+                            className="profile-input"
+                        />
+                    </Grid>
+                </Grid>
 
-  return (
-    <Container component="main" maxWidth="md">
-      <Paper elevation={3} sx={{ p: 4, mt: 5 }}>
-        <Box display="flex" alignItems="center" gap={2}>
-          <Avatar sx={{ bgcolor: 'primary.main' }}>
-            <FaUser />
-          </Avatar>
-          <Typography variant="h5">Student Profile</Typography>
-        </Box>
-
-        <Divider sx={{ my: 3 }} />
-
-        <Grid container spacing={3}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Name"
-              name="name"
-              value={user.name}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Email"
-              name="email"
-              value={user.email}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Contact Number"
-              name="contactNumber"
-              value={user.contactNumber}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
-
-        <Box mt={4}>
-          <Button
-            variant="contained"
-            startIcon={<FaPencilAlt />}
-            onClick={handleUpdateProfile}
-          >
-            Update Details
-          </Button>
-        </Box>
-      </Paper>
-    </Container>
-  );
+                <Box className="profile-actions">
+                    <Button
+                        variant="contained"
+                        color="primary"
+                        startIcon={<FaPencilAlt />}
+                        onClick={handleUpdateProfile}
+                        className="update-button"
+                    >
+                        Update Details
+                    </Button>
+                </Box>
+            </Paper>
+        </Container>
+    );
 }

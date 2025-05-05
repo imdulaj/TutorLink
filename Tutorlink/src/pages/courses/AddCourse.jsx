@@ -6,9 +6,8 @@ import {
   Button,
   Typography,
   MenuItem,
-  Box,
-  Grid,
-  InputAdornment
+  Rating,
+  Box
 } from '@mui/material';
 import { FaBook } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -21,6 +20,7 @@ const AddCourse = () => {
     video: '',
     duration: '',
     level: 'Beginner',
+    rating: 0,
     price: '',
     description: ''
   });
@@ -37,6 +37,13 @@ const AddCourse = () => {
     }));
   };
 
+  const handleRatingChange = (event, newValue) => {
+    setCourseData(prevState => ({
+      ...prevState,
+      rating: newValue
+    }));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const existingCourses = JSON.parse(localStorage.getItem('courses')) || [];
@@ -46,144 +53,123 @@ const AddCourse = () => {
   };
 
   return (
-    <Container maxWidth="lg" className="add-course-container">
-      <Paper elevation={12} className="form-paper">
+    <Container className="add-course-container">
+      <Paper elevation={3} className="form-paper">
         <Typography variant="h4" className="form-title">
           <FaBook className="title-icon" />
           Add New Course
         </Typography>
 
         <form onSubmit={handleSubmit} className="course-form">
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Course Title"
-                name="title"
-                value={courseData.title}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-              />
-            </Grid>
+          <TextField
+            fullWidth
+            label="Course Title"
+            name="title"
+            value={courseData.title}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Instructor Name"
-                name="instructor"
-                value={courseData.instructor}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-              />
-            </Grid>
+          <TextField
+            fullWidth
+            label="Instructor Name"
+            name="instructor"
+            value={courseData.instructor}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Video URL"
-                name="video"
-                value={courseData.video}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-              />
-            </Grid>
+          <TextField
+            fullWidth
+            label="Video URL"
+            name="video"
+            value={courseData.video}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Duration (hours)"
-                name="duration"
-                type="number"
-                value={courseData.duration}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">hrs</InputAdornment>
-                }}
-              />
-            </Grid>
+          <TextField
+            fullWidth
+            label="Duration (in hours)"
+            name="duration"
+            type="number"
+            value={courseData.duration}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                select
-                label="Level"
-                name="level"
-                value={courseData.level}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-              >
-                {levels.map((level) => (
-                  <MenuItem key={level} value={level}>
-                    {level}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+          <TextField
+            fullWidth
+            select
+            label="Level"
+            name="level"
+            value={courseData.level}
+            onChange={handleChange}
+            required
+            margin="normal"
+          >
+            {levels.map((level) => (
+              <MenuItem key={level} value={level}>
+                {level}
+              </MenuItem>
+            ))}
+          </TextField>
 
-            <Grid item xs={12} sm={6}>
-              <TextField
-                fullWidth
-                label="Price"
-                name="price"
-                type="number"
-                value={courseData.price}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-                InputProps={{
-                  startAdornment: <InputAdornment position="start">$</InputAdornment>
-                }}
-              />
-            </Grid>
+          <Box className="rating-box">
+            <Typography component="legend">Rating</Typography>
+            <Rating
+              name="rating"
+              value={courseData.rating}
+              onChange={handleRatingChange}
+              precision={0.5}
+            />
+          </Box>
 
-            <Grid item xs={12}>
-              <TextField
-                fullWidth
-                label="Description"
-                name="description"
-                value={courseData.description}
-                onChange={handleChange}
-                required
-                variant="outlined"
-                color="primary"
-                multiline
-                rows={4}
-              />
-            </Grid>
+          <TextField
+            fullWidth
+            label="Price"
+            name="price"
+            type="number"
+            value={courseData.price}
+            onChange={handleChange}
+            required
+            margin="normal"
+          />
 
-            <Grid item xs={12} className="button-grid">
-              <Button
-                type="submit"
-                variant="contained"
-                color="primary"
-                size="large"
-                className="submit-btn"
-              >
-                Add Course
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                size="large"
-                onClick={() => navigate('/ViewCourse')}
-                className="view-courses-btn"
-              >
-                View Courses
-              </Button>
-            </Grid>
-          </Grid>
+          <TextField
+            fullWidth
+            label="Description"
+            name="description"
+            value={courseData.description}
+            onChange={handleChange}
+            required
+            margin="normal"
+            multiline
+            rows={4}
+          />
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className="submit-btn"
+            size="large"
+          >
+            Add Course
+          </Button>
+          <Button
+            variant="outlined"
+            color="secondary"
+            className="submit-btn"
+            size="large"
+            onClick={() => navigate('/ViewCourse')}
+          >
+            View Courses
+          </Button>
         </form>
       </Paper>
     </Container>
