@@ -6,7 +6,6 @@ import {
   Button,
   Typography,
   MenuItem,
-  Rating,
   Box,
   Grid,
   InputAdornment
@@ -22,7 +21,6 @@ const AddCourse = () => {
     video: '',
     duration: '',
     level: 'Beginner',
-    rating: 0,
     price: '',
     description: ''
   });
@@ -36,13 +34,6 @@ const AddCourse = () => {
     setCourseData(prevState => ({
       ...prevState,
       [name]: value
-    }));
-  };
-
-  const handleRatingChange = (event, newValue) => {
-    setCourseData(prevState => ({
-      ...prevState,
-      rating: newValue
     }));
   };
 
@@ -138,19 +129,6 @@ const AddCourse = () => {
                   </MenuItem>
                 ))}
               </TextField>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Box className="rating-box">
-                <Typography component="legend">Rating</Typography>
-                <Rating
-                  name="rating"
-                  value={courseData.rating}
-                  onChange={handleRatingChange}
-                  precision={0.5}
-                  size="large"
-                />
-              </Box>
             </Grid>
 
             <Grid item xs={12} sm={6}>

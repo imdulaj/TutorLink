@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from "@mui/material";
+import { Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField, Drawer, List, ListItem, ListItemText, CssBaseline } from "@mui/material";
 import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "./ViewCourse.css";
+import logo from "../../assets/loginHero.jpg"; // Corrected the path
 
 const ViewCourse = () => {
   const [courses, setCourses] = useState([]);
@@ -26,76 +27,107 @@ const ViewCourse = () => {
   );
 
   return (
-    <div className="container">
-      <h2 className="title">Course List</h2>
-      <div className="search-container">
-        <TextField
-          label="Search Courses"
-          variant="outlined"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="search-input"
-          fullWidth
-          InputProps={{
-            style: { borderRadius: "8px" },
-          }}
-        />
-      </div>
-      <div className="button-container">
-        <Link to="/AddCourse">
-          <Button variant="contained" color="success">+ Create New Course</Button>
-        </Link>
-      </div>
+    <div className="view-course-layout">
+      <CssBaseline />
+      <Drawer
+        variant="permanent"
+        anchor="left"
+        className="side-nav"
+        PaperProps={{ className: "side-nav-paper" }}
+      >
+        <div className="side-nav-header">
+          <img src={logo} alt="TutorLink Logo" className="side-nav-logo" />
+          <h2>TutorLink</h2>
+        </div>
+        <List>
+          <ListItem button component={Link} to="/" className="side-nav-item">
+            <ListItemText primary="Home" />
+          </ListItem>
+          <ListItem button component={Link} to="/ViewCourse" className="side-nav-item">
+            <ListItemText primary="Courses List" />
+          </ListItem>
+          <ListItem button component={Link} to="/materials" className="side-nav-item">
+            <ListItemText primary="Materials" />
+          </ListItem>
+          <ListItem button component={Link} to="/quiz" className="side-nav-item">
+            <ListItemText primary="Quiz" />
+          </ListItem>
+        </List>
+      </Drawer>
+      <main className="main-content">
+        <div className="container">
+          <h2 className="title">Course List</h2>
+          <div className="search-container">
+            <TextField
+              label="Search Courses"
+              variant="outlined"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="search-input"
+              fullWidth
+              InputProps={{
+                style: { borderRadius: "8px" },
+              }}
+            />
+          </div>
+        
+          <div className="button-container">
+            <Link to="/AddCourse">
+              <Button variant="contained" color="success">+ Create New Course</Button>
+            </Link>
+          </div>
 
-      {filteredCourses.length > 0 ? (
-        <TableContainer component={Paper} className="table-container">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>No</TableCell>
-                <TableCell>Video</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Details</TableCell>
-                <TableCell>Instructor</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredCourses.map((course, index) => (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    <video width="100" height="60" controls>
-                      <source src={course.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </TableCell>
-                  <TableCell>{course.title}</TableCell>
-                  <TableCell>{course.description}</TableCell>
-                  <TableCell>{course.instructor}</TableCell>
-                  <TableCell>{course.duration}</TableCell>
-                  <TableCell>{course.price}</TableCell>
-                  <TableCell>
-                    <Link to={`/ViewCourse/${index}`}>
-                      <IconButton color="primary"><FaEye /></IconButton>
-                    </Link>
-                    <Link to={`/EditCourse/${index}`}>
-                      <IconButton color="primary"><FaEdit /></IconButton>
-                    </Link>
-                    <IconButton color="secondary" onClick={() => handleDelete(index)}>
-                      <FaTrash />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <p className="no-courses">No courses found.</p>
-      )}
+          {filteredCourses.length > 0 ? (
+            <TableContainer component={Paper} className="table-container">
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>No</TableCell>
+                    <TableCell>Video</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Details</TableCell>
+                    <TableCell>Instructor</TableCell>
+                    <TableCell>Duration</TableCell>
+                    <TableCell>Price</TableCell>
+                    <TableCell>Action</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {filteredCourses.map((course, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell>
+                        <video width="100" height="60" controls>
+                          <source src={course.video} type="video/mp4" />
+                          Your browser does not support the video tag.
+                        </video>
+                      </TableCell>
+                      <TableCell>{course.title}</TableCell>
+                      <TableCell>{course.description}</TableCell>
+                      <TableCell>{course.instructor}</TableCell>
+                      <TableCell>{course.duration}</TableCell>
+                      <TableCell>{course.price}</TableCell>
+                      <TableCell>
+                        <Link to={`/ViewCourse/${index}`}>
+                          <IconButton color="primary"><FaEye /></IconButton>
+                        </Link>
+                        <Link to={`/EditCourse/${index}`}>
+                          <IconButton color="primary"><FaEdit /></IconButton>
+                        </Link>
+                        <IconButton color="secondary" onClick={() => handleDelete(index)}>
+                          <FaTrash />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <p className="no-courses">No courses found.</p>
+          )}
+        </div>
+      </main>
     </div>
   );
 };
