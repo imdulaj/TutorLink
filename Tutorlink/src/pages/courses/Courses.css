@@ -1,7 +1,11 @@
+.container{
+  margin: 0 auto;
+  padding: 0;
+}
 .courses-container {
   
     padding: 80px 20px;
-    margin-top: 64px;
+    margin: 0 auto;
   }
   
   .courses-title {

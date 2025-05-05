@@ -72,15 +72,18 @@
   .update-button:hover {
     background-color: #0d47a1 !important;
   }
+
+  
   
   .delete-button {
+    background-color: #d32f2f !important;
     border-color: #d32f2f !important;
-    color: #d32f2f !important;
+    color: #fff !important;
     padding: 10px 24px !important;
   }
   
   .delete-button:hover {
-    background-color: #ffebee !important;
+    background-color: #b71c1c !important;
   }
   
   @media (max-width: 600px) {

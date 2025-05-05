@@ -50,6 +50,7 @@ function MaterialCard({ material }) {
 
 export function Materials() {
   return (
+    <>
     <div className='container'>
     <div className="materials-container">
       <Header />
@@ -66,8 +67,10 @@ export function Materials() {
       </div>
       
     </div>
-    <Footer />
+   
     </div>
+    <Footer />
+    </>
       
     
   );

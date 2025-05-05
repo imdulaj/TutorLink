@@ -42,9 +42,11 @@ import { Footer } from '../../components/footer/Footer';
     };
   
     return (
-      <div>
+      <>
+      <Header />
+      <div className="container">
       <Container component="main" maxWidth="lg" className="courses-container">
-        <Header />
+        
         <Typography variant="h4" component="h1" className="courses-title">
           Available Courses
         </Typography>
@@ -112,8 +114,10 @@ import { Footer } from '../../components/footer/Footer';
         </Grid>
        
       </Container>
-      <Footer />
+     
       </div>
+      <Footer />
+      </>
       
     );
   }
