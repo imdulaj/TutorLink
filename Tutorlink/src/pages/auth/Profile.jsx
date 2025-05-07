@@ -192,7 +192,7 @@ export function Profile() {
   className="profile-avatar"
   onClick={handleAvatarClick}
   sx={{ width: 80, height: 80, cursor: "pointer" }}
-  src={`http://localhost:3000/${studentData.photoUrl}` || "/images/default-profile.jpg"}
+  src={`http://localhost:3000/${studentData.photoUrl}` || "/uploads/pic.png"}
 >
   {!studentData.photoUrl && <FaUser size={40} />}
 </Avatar>
