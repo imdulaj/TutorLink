@@ -161,8 +161,12 @@ export const uploadProfilePicture = async (req, res) => {
     await user.save();
 
     res.json({
-      message: "Profile picture updated successfully",
-      profilePicture: user.profilePicture
+      name: user.name,
+      email: user.email,
+      registrationNumber: user.registrationNumber,
+      contactNumber: user.contactNumber,
+      stream: user.stream,
+      profilePicture: user.profilePicture, // <---- make sure this key matches frontend
     });
   } catch (error) {
     console.error("Error uploading profile picture:", error);

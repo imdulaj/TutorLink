@@ -117,10 +117,10 @@ export function Profile() {
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     const formData = new FormData();
     formData.append("profilePicture", file); // ✅ must match multer key
-  
+
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
@@ -130,14 +130,14 @@ export function Profile() {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
-          }
+          },
         }
       );
-  
+
       const imageUrl = `http://localhost:3000/${response.data.profilePicture}`;
       setStudentData((prev) => ({
         ...prev,
-        photoUrl: imageUrl, // Update the state immediately with the new photo URL
+        profilePicture: imageUrl, // Update the state immediately with the new photo URL
       }));
       setUploadSuccess(true);
       setUploadError("");
@@ -189,13 +189,17 @@ export function Profile() {
               onChange={handleFileChange}
             />
             <Avatar
-  className="profile-avatar"
-  onClick={handleAvatarClick}
-  sx={{ width: 80, height: 80, cursor: "pointer" }}
-  src={`http://localhost:3000/${studentData.photoUrl}` || "/uploads/pic.png"}
->
-  {!studentData.photoUrl && <FaUser size={40} />}
-</Avatar>
+              className="profile-avatar"
+              onClick={handleAvatarClick}
+              sx={{ width: 80, height: 80, cursor: "pointer" }}
+              src={
+                studentData.photoUrl
+                  ? `http://localhost:3000${studentData.profilePicture}`
+                  : "/uploads/pic.png"
+              }
+            >
+              {!studentData.profilePicture && <FaUser size={40} />}
+            </Avatar>
             <Typography variant="h4" className="profile-name">
               Student Profile
             </Typography>
