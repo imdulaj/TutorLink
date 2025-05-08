@@ -135,7 +135,7 @@ function Dashboard() {
           transition={{ duration: 0.7, type: 'spring', stiffness: 80 }}
         >
           <Typography variant="h3" className="dashboard-title">
-            Educational Admin Dashboard
+            Admin Dashboard
           </Typography>
         </motion.div>
 

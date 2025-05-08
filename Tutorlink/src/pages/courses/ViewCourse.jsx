@@ -232,7 +232,12 @@ const ViewCourse = () => {
           {chartData.length > 0 ? (
             <Card className="analytics-card">
               <CardContent>
-                <Typography variant="h5" component="div" className="analytics-title">
+                <Typography 
+                  variant="h5" 
+                  component="div" 
+                  className="analytics-title" 
+                  style={{ fontWeight: 'bold', color: 'black', textAlign: 'center' }}
+                >
                   Instructor Price Analytics
                 </Typography>
                 <Box className="chart-container">
