@@ -8,14 +8,18 @@ import {
     IconButton, 
     Box,
     Chip,
-    Rating
+    Rating,
+    ListItem,
+    ListItemText
   } from '@mui/material';
   import { 
     FaHeart, 
     FaRegHeart, 
     FaClock, 
-    FaGraduationCap 
+    FaGraduationCap,
+    FaHome
   } from 'react-icons/fa';
+  import { Link } from 'react-router-dom';
   import { useState, useEffect } from 'react';
   import './Courses.css';
 import { Header } from '../../components/header/Header';
@@ -118,6 +122,10 @@ import { Footer } from '../../components/footer/Footer';
               </Grid>
             ))}
           </Grid>
+          <ListItem button component={Link} to="/dashboard" className="side-nav-item">
+            <FaHome className="side-nav-item-icon" />
+            <ListItemText primary="Dashboard" />
+          </ListItem>
         </Container>
         <Footer />
       </div>
