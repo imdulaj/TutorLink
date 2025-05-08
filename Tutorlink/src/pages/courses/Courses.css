@@ -1,9 +1,34 @@
+/* Global Styles */
 .courses-container {
     padding: 80px 20px;
     margin-top: 64px;
-  }
-  
-  .courses-title {
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.courses-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100"><rect fill="none" width="100" height="100"/><rect fill="rgba(26, 35, 126, 0.03)" x="25" y="25" width="50" height="50" transform="rotate(45 50 50)"/></svg>');
+    opacity: 0.5;
+    z-index: 0;
+}
+
+.courses-header {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 40px;
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.courses-title {
     color: #1a237e;
     font-size: 3rem;
     font-weight: 800;

@@ -1,11 +1,7 @@
 {
   "dependencies": {
     "jspdf": "^3.0.1",
-<<<<<<< HEAD
     "jspdf-autotable": "^5.0.2",
     "jwt-decode": "^4.0.0"
-=======
-    "react-router-dom": "^7.4.0"
->>>>>>> 69e8710b5147290d914d36de8207a28e3f260ae6
   }
 }
