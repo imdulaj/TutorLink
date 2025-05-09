@@ -1,9 +1,23 @@
 import { AppBar, Toolbar, Typography, Button, Container, Box } from '@mui/material';
 import { FaGraduationCap } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import './Header.css'; 
-import {Link} from 'react-router-dom';
 
 export function Header() {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    // Example: Clear tokens or user info from storage
+    localStorage.removeItem('token'); // or whatever key you used
+    sessionStorage.removeItem('user'); // if applicable
+
+    // Optionally: call an API to logout from server
+    // await api.logout();
+
+    // Navigate to login page
+    navigate('/');
+  };
+
   return (
     <AppBar position="fixed" color="default" elevation={2}>
       <Container maxWidth="lg">
@@ -21,7 +35,7 @@ export function Header() {
             <Link to='/quiz'><Button color="inherit">Quizzes</Button></Link>
             <Link to='/materials'><Button color="inherit">Materials</Button></Link>
             <Link to='/profile'><Button color="inherit">Profile</Button></Link>
-            <Button variant="contained" color="primary">
+            <Button variant="contained" color="primary" onClick={handleLogout}>
               Log out
             </Button>
           </Box>

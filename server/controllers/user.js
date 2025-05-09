@@ -145,3 +145,31 @@ export const deleteProfile = async (req, res) => {
     res.status(500).json({ message: "Server error", error: error.message });
   }
 };
+
+
+export const uploadProfilePicture = async (req, res) => {
+  try {
+    const user = req.user; // comes from isAuth middleware
+
+    console.log("Received file:", req.file); // ✅ debug log
+
+    if (!req.file) {
+      return res.status(400).json({ message: "No file uploaded" });
+    }
+
+    user.profilePicture = `/uploads/${req.file.filename}`;
+    await user.save();
+
+    res.json({
+      name: user.name,
+      email: user.email,
+      registrationNumber: user.registrationNumber,
+      contactNumber: user.contactNumber,
+      stream: user.stream,
+      profilePicture: user.profilePicture, // <---- make sure this key matches frontend
+    });
+  } catch (error) {
+    console.error("Error uploading profile picture:", error);
+    res.status(500).json({ message: "Failed to upload profile picture" });
+  }
+};

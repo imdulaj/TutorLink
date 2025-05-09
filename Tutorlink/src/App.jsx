@@ -16,6 +16,7 @@ import AddCourse from './pages/courses/AddCourse.jsx';
 import AddQuiz from './pages/quiz/AddQuiz.jsx';
 import AddMaterials from './pages/Materials/AddMaterials.jsx';
 import EditQuiz from './pages/quiz/EditQuiz.jsx';
+import {UpdateUser} from './pages/auth/UpdateUser.jsx';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
         {/* User Routes */}
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
+        
         <Route path="/courses" element={<Courses />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/materials" element={<Materials />} />
@@ -43,6 +45,7 @@ function App() {
         <Route path="/AddQuiz" element={<AddQuiz />} />
         <Route path="/EditQuiz/:id" element={<EditQuiz />} />
         <Route path="/AddMaterials" element={<AddMaterials />} />
+        <Route path="/UpdateUser" element={<UpdateUser />} />
       </Routes>
     </BrowserRouter>
   );
