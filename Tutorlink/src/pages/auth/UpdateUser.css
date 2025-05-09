@@ -1,100 +1,105 @@
-/* Wrapper centers everything vertically and horizontally */
-.update-wrapper {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(135deg, #1a237e, #3949ab);
-  padding: 20px;
-  margin-top: 30px;
-}
-
 .update-container {
-  width: 100%;
-}
-
-.profile-paper {
-  padding: 40px;
-  border-radius: 16px;
-  background-color: #ffffff;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-}
-
-.profile-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 24px;
-}
-
-.profile-avatar {
-  width: 100px !important;
-  height: 100px !important;
-  background-color: #1a237e !important;
-  margin-bottom: 16px;
-}
-
-.profile-name {
-  color: #1a237e;
-  font-weight: 600 !important;
-}
-
-.profile-divider {
-  margin: 24px 0 !important;
-}
-
-.profile-form {
-  margin-bottom: 32px;
-}
-
-.profile-input {
-  background-color: #f5f5f5;
-  border-radius: 8px;
-}
-
-.profile-input .MuiOutlinedInput-root {
-  border-radius: 8px;
-}
-
-.profile-input .MuiOutlinedInput-notchedOutline {
-  border-color: #e0e0e0;
-}
-
-.profile-input .MuiInputLabel-root {
-  color: #1a237e;
-}
-
-.profile-input .MuiOutlinedInput-input {
-  padding: 14px;
-}
-
-.profile-actions {
-  display: flex;
-  justify-content: center;
-  margin-top: 32px;
-}
-
-.update-button {
-  background-color: #1a237e !important;
-  padding: 12px 32px !important;
-  font-weight: 600;
-  letter-spacing: 1px;
-}
-
-.update-button:hover {
-  background-color: #0d47a1 !important;
-}
-
-@media (max-width: 600px) {
+    padding: 40px 20px;
+    margin-top: 64px;
+    background-color: #1a237e;
+    
+  }
+  
   .profile-paper {
-    padding: 24px 16px;
+    padding: 32px;
   }
-
-  .profile-actions {
+  
+  .profile-header {
+    display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
+    margin-bottom: 24px;
   }
-
+  
+  .profile-avatar {
+    width: 100px !important;
+    height: 100px !important;
+    background-color: #1a237e !important;
+    margin-bottom: 16px;
+  }
+  
+  .profile-name {
+    margin-bottom: 8px !important;
+    color: #1a237e;
+    font-weight: 600 !important;
+  }
+  
+  .profile-divider {
+    margin: 24px 0 !important;
+  }
+  
+  .profile-form {
+    margin-bottom: 32px;
+  }
+  
+  .profile-input {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+  }
+  
+  .profile-input .MuiOutlinedInput-root {
+    border-radius: 8px;
+  }
+  
+  .profile-input .MuiOutlinedInput-notchedOutline {
+    border-color: #e0e0e0;
+  }
+  
+  .profile-input .MuiInputLabel-root {
+    color: #1a237e;
+  }
+  
+  .profile-input .MuiOutlinedInput-input {
+    padding: 14px;
+  }
+  
+  .profile-actions {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    margin-top: 32px;
+  }
+  
   .update-button {
-    width: 100%;
+    background-color: #1a237e !important;
+    padding: 10px 24px !important;
   }
-}
+  
+  .update-button:hover {
+    background-color: #0d47a1 !important;
+  }
+  
+  .delete-button {
+    border-color: #d32f2f !important;
+    color: #d32f2f !important;
+    padding: 10px 24px !important;
+  }
+  
+  .delete-button:hover {
+    background-color: #ffebee !important;
+  }
+  
+  @media (max-width: 600px) {
+    .profile-container {
+      padding: 20px 16px;
+    }
+  
+    .profile-paper {
+      padding: 24px 16px;
+    }
+  
+    .profile-actions {
+      flex-direction: column;
+    }
+  
+    .update-button,
+    .delete-button {
+      width: 100%;
+    }
+  }
