@@ -1,81 +1,74 @@
 import React, { useState, useEffect } from "react";
-import { Button, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
-import { FaEdit, FaTrash, FaEye } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Button, Card, CardContent, IconButton } from "@mui/material";
+import { FaEdit, FaTrash } from "react-icons/fa";
 import "./ViewCourse.css";
+import { Link } from 'react-router-dom';
 
 const ViewCourse = () => {
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
-    const storedCourses = JSON.parse(localStorage.getItem("courses")) || [];
+    const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
     setCourses(storedCourses);
   }, []);
 
   const handleDelete = (id) => {
     const updatedCourses = courses.filter((_, index) => index !== id);
     setCourses(updatedCourses);
-    localStorage.setItem("courses", JSON.stringify(updatedCourses));
+    localStorage.setItem('courses', JSON.stringify(updatedCourses));
+  };
+
+  const handleUpdate = (id) => {
+    const newName = prompt("Enter new course name:");
+    if (newName) {
+      const updatedCourses = courses.map((course, index) =>
+        index === id ? { ...course, title: newName } : course
+      );
+      setCourses(updatedCourses);
+      localStorage.setItem('courses', JSON.stringify(updatedCourses));
+    }
   };
 
   return (
-    <div className="container">
-      <h2 className="title">Course List</h2>
-      <div className="button-container">
-        <Link to="/AddCourse">
-          <Button variant="contained" color="success">+ Create New Course</Button>
-        </Link>
-      </div>
+    <div className="courses-container">
+      <Link to='/AddCourse'><Button variant="contained" color="primary" className="add-button">
+        Add New
+      </Button>
+      </Link>
 
-      {courses.length > 0 ? (
-        <TableContainer component={Paper} className="table-container">
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>No</TableCell>
-                <TableCell>Video</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Details</TableCell>
-                <TableCell>Instructor</TableCell>
-                <TableCell>Duration</TableCell>
-                <TableCell>Price</TableCell>
-                <TableCell>Action</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {courses.map((course, index) => (
-                <TableRow key={index}>
-                  <TableCell>{index + 1}</TableCell>
-                  <TableCell>
-                    <video width="100" height="60" controls>
-                      <source src={course.video} type="video/mp4" />
-                      Your browser does not support the video tag.
-                    </video>
-                  </TableCell>
-                  <TableCell>{course.title}</TableCell>
-                  <TableCell>{course.description}</TableCell>
-                  <TableCell>{course.instructor}</TableCell>
-                  <TableCell>{course.duration}</TableCell>
-                  <TableCell>{course.price}</TableCell>
-                  <TableCell>
-                    <Link to={`/ViewCourse/${index}`}>
-                      <IconButton color="primary"><FaEye /></IconButton>
-                    </Link>
-                    <Link to={`/EditCourse/${index}`}>
-                      <IconButton color="primary"><FaEdit /></IconButton>
-                    </Link>
-                    <IconButton color="secondary" onClick={() => handleDelete(index)}>
-                      <FaTrash />
-                    </IconButton>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      ) : (
-        <p className="no-courses">No courses available.</p>
-      )}
+      <div className="courses-list">
+        {courses.map((course, index) => (
+          <Card key={index} className="course-card">
+            <CardContent className="course-content">
+              <div>
+                <h3>{course.title}</h3>
+                <p><strong>Instructor:</strong> {course.instructor}</p>
+                <p><strong>Duration:</strong> {course.duration} hours</p>
+                <p><strong>Level:</strong> {course.level}</p>
+                <p><strong>Rating:</strong> {course.rating}</p>
+                <p><strong>Price:</strong> {course.price}</p>
+                <p><strong>Description:</strong> {course.description}</p>
+                {course.video && (
+                  <video controls width="100%">
+                    <source src={course.video} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+              <div className="action-buttons">
+                <Link to={`/EditCourse/${index}`}>
+                  <IconButton color="primary">
+                    <FaEdit />
+                  </IconButton>
+                </Link>
+                <IconButton color="secondary" onClick={() => handleDelete(index)}>
+                  <FaTrash />
+                </IconButton>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   );
 };
