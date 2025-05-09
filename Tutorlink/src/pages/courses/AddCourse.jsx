@@ -7,10 +7,18 @@ import {
   Typography,
   MenuItem,
   Rating,
-  Box
+  Box,
+  Grid,
+  CssBaseline,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  InputAdornment
 } from '@mui/material';
-import { FaBook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaBook, FaChevronLeft, FaBars, FaHome, FaFolderOpen, FaQuestionCircle, FaChartBar, FaChalkboardTeacher, FaClock, FaMoneyBillWave } from 'react-icons/fa';
+import { Link, useNavigate } from 'react-router-dom';
 import './AddCourse.css';
 
 const AddCourse = () => {
@@ -25,6 +33,8 @@ const AddCourse = () => {
     description: ''
   });
 
+  const [sideNavOpen, setSideNavOpen] = useState(true);
+  const isMobile = window.innerWidth <= 768; // example mobile check
   const navigate = useNavigate();
 
   const levels = ['Beginner', 'Intermediate', 'Advanced'];
@@ -53,18 +63,9 @@ const AddCourse = () => {
   };
 
   return (
-<<<<<<< Updated upstream
-    <Container className="add-course-container">
-      <Paper elevation={3} className="form-paper">
-        <Typography variant="h4" className="form-title">
-          <FaBook className="title-icon" />
-          Add New Course
-        </Typography>
-=======
     <div className="view-course-layout">
       <CssBaseline />
-      
-      {/* Mobile menu toggle button */}
+
       {isMobile && (
         <IconButton
           className="menu-toggle"
@@ -84,8 +85,7 @@ const AddCourse = () => {
           {sideNavOpen ? <FaChevronLeft /> : <FaBars />}
         </IconButton>
       )}
-      
-      {/* Side Navigation */}
+
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         anchor="left"
@@ -95,7 +95,7 @@ const AddCourse = () => {
         onClose={() => setSideNavOpen(false)}
       >
         <div className="side-nav-header">
-          <img src={logo} alt="TutorLink Logo" className="side-nav-logo" />
+          <img src="/logo.png" alt="TutorLink Logo" className="side-nav-logo" />
           <h2>TutorLink</h2>
         </div>
         <List>
@@ -121,28 +121,25 @@ const AddCourse = () => {
           </ListItem>
         </List>
       </Drawer>
-      
-      {/* Main Content */}
+
       <main className="main-content">
-        <div className="container">
-          <Paper className="add-course-paper" elevation={3}>
-            <div className="title-container">
-              <FaBook className="title-icon" />
-              <h2 className="title">Add New Course</h2>
+        <Container maxWidth="md">
+          <Paper className="add-course-paper" elevation={3} sx={{ padding: 4, marginTop: 4 }}>
+            <div className="title-container" style={{ display: 'flex', alignItems: 'center', marginBottom: '1rem' }}>
+              <FaBook style={{ marginRight: '0.5rem' }} />
+              <Typography variant="h4">Add New Course</Typography>
             </div>
-            
-            <form className="course-form" onSubmit={handleSubmit}>
+
+            <form onSubmit={handleSubmit} className="course-form">
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <TextField
-                    name="title"
-                    label="Course Title"
-                    variant="outlined"
                     fullWidth
-                    required
-                    value={course.title}
+                    label="Course Title"
+                    name="title"
+                    value={courseData.title}
                     onChange={handleChange}
-                    className="form-field"
+                    required
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -152,31 +149,15 @@ const AddCourse = () => {
                     }}
                   />
                 </Grid>
-                
+
                 <Grid item xs={12}>
                   <TextField
-                    name="description"
-                    label="Course Description"
-                    variant="outlined"
                     fullWidth
-                    multiline
-                    rows={4}
-                    value={course.description}
-                    onChange={handleChange}
-                    className="form-field"
-                  />
-                </Grid>
-                
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    name="instructor"
                     label="Instructor Name"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    value={course.instructor}
+                    name="instructor"
+                    value={courseData.instructor}
                     onChange={handleChange}
-                    className="form-field"
+                    required
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -186,17 +167,26 @@ const AddCourse = () => {
                     }}
                   />
                 </Grid>
-                
-                <Grid item xs={12} md={6}>
+
+                <Grid item xs={12}>
                   <TextField
-                    name="duration"
-                    label="Course Duration (in weeks)"
-                    variant="outlined"
                     fullWidth
-                    value={course.duration}
+                    label="Video URL"
+                    name="video"
+                    value={courseData.video}
                     onChange={handleChange}
-                    placeholder="e.g. 8 weeks"
-                    className="form-field"
+                  />
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Duration (in hours)"
+                    name="duration"
+                    type="number"
+                    value={courseData.duration}
+                    onChange={handleChange}
+                    required
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -206,18 +196,43 @@ const AddCourse = () => {
                     }}
                   />
                 </Grid>
-                
-                <Grid item xs={12} md={6}>
+
+                <Grid item xs={12}>
                   <TextField
-                    name="price"
-                    label="Course Price"
-                    variant="outlined"
                     fullWidth
-                    required
-                    value={course.price}
+                    select
+                    label="Level"
+                    name="level"
+                    value={courseData.level}
                     onChange={handleChange}
-                    placeholder="e.g. $99.99"
-                    className="form-field"
+                  >
+                    {['Beginner', 'Intermediate', 'Advanced'].map(level => (
+                      <MenuItem key={level} value={level}>{level}</MenuItem>
+                    ))}
+                  </TextField>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <Box>
+                    <Typography>Rating</Typography>
+                    <Rating
+                      name="rating"
+                      value={courseData.rating}
+                      onChange={handleRatingChange}
+                      precision={0.5}
+                    />
+                  </Box>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Price"
+                    name="price"
+                    type="number"
+                    value={courseData.price}
+                    onChange={handleChange}
+                    required
                     InputProps={{
                       startAdornment: (
                         <InputAdornment position="start">
@@ -227,133 +242,45 @@ const AddCourse = () => {
                     }}
                   />
                 </Grid>
-                
-                <Grid item xs={12} md={6}>
+
+                <Grid item xs={12}>
                   <TextField
-                    name="image"
-                    label="Video URL (Optional)"
-                    variant="outlined"
                     fullWidth
-                    value={course.image}
+                    label="Description"
+                    name="description"
+                    value={courseData.description}
                     onChange={handleChange}
-                    className="form-field"
+                    required
+                    multiline
+                    rows={4}
                   />
                 </Grid>
->>>>>>> Stashed changes
 
-        <form onSubmit={handleSubmit} className="course-form">
-          <TextField
-            fullWidth
-            label="Course Title"
-            name="title"
-            value={courseData.title}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
+                <Grid item xs={12} sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                  >
+                    Add Course
+                  </Button>
 
-          <TextField
-            fullWidth
-            label="Instructor Name"
-            name="instructor"
-            value={courseData.instructor}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Video URL"
-            name="video"
-            value={courseData.video}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Duration (in hours)"
-            name="duration"
-            type="number"
-            value={courseData.duration}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            select
-            label="Level"
-            name="level"
-            value={courseData.level}
-            onChange={handleChange}
-            required
-            margin="normal"
-          >
-            {levels.map((level) => (
-              <MenuItem key={level} value={level}>
-                {level}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Box className="rating-box">
-            <Typography component="legend">Rating</Typography>
-            <Rating
-              name="rating"
-              value={courseData.rating}
-              onChange={handleRatingChange}
-              precision={0.5}
-            />
-          </Box>
-
-          <TextField
-            fullWidth
-            label="Price"
-            name="price"
-            type="number"
-            value={courseData.price}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Description"
-            name="description"
-            value={courseData.description}
-            onChange={handleChange}
-            required
-            margin="normal"
-            multiline
-            rows={4}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="submit-btn"
-            size="large"
-          >
-            Add Course
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className="submit-btn"
-            size="large"
-            onClick={() => navigate('/ViewCourse')}
-          >
-            View Courses
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    size="large"
+                    onClick={() => navigate('/ViewCourse')}
+                  >
+                    View Courses
+                  </Button>
+                </Grid>
+              </Grid>
+            </form>
+          </Paper>
+        </Container>
+      </main>
+    </div>
   );
 };
 
