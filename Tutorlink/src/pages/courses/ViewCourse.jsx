@@ -329,7 +329,7 @@ const ViewCourse = () => {
                       <TableCell>{course.duration}</TableCell>
                       <TableCell>{course.price}</TableCell>
                       <TableCell>
-                        <Link to={`/EditCourse/${index}`}>
+                        <Link to={`/EditCourse/${courses[index]?.id || index}`}>
                           <IconButton className="icon-button" color="primary">
                             <Tooltip title="Edit Course" TransitionComponent={Zoom} arrow>
                               <FaEdit />

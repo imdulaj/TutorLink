@@ -53,13 +53,17 @@ const EditCourse = () => {
 
   useEffect(() => {
     const storedCourses = JSON.parse(localStorage.getItem('courses')) || [];
-    const courseToEdit = storedCourses[id];
-    if (courseToEdit) {
-      setCourseData(courseToEdit);
-    } else {
-      alert('Course not found!');
+    
+    // Ensure the id is a valid number
+    const courseIndex = parseInt(id, 10);
+    if (isNaN(courseIndex) || courseIndex < 0 || courseIndex >= storedCourses.length) {
+      alert('Invalid course ID or course not found!');
       navigate('/ViewCourse');
+      return;
     }
+
+    const courseToEdit = storedCourses[courseIndex];
+    setCourseData(courseToEdit);
   }, [id, navigate]);
 
   const handleChange = (e) => {
