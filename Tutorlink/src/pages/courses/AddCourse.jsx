@@ -2,14 +2,23 @@ import React, { useState, useEffect } from "react";
 import {
   Button,
   TextField,
-  Button,
   Typography,
   MenuItem,
   Rating,
-  Box
+  Box,
+  Grid,
+  Container,
+  Paper,
+  CssBaseline,
+  Drawer,
+  List,
+  ListItem,
+  ListItemText,
+  IconButton,
+  InputAdornment
 } from '@mui/material';
-import { FaBook } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaBook, FaChalkboardTeacher, FaClock, FaMoneyBillWave, FaChevronLeft, FaBars, FaHome, FaFolderOpen, FaQuestionCircle, FaChartBar } from 'react-icons/fa';
+import { useNavigate, Link } from 'react-router-dom';
 import './AddCourse.css';
 
 const AddCourse = () => {
@@ -21,75 +30,67 @@ const AddCourse = () => {
     level: 'Beginner',
     rating: 0,
     price: '',
-    description: ''
+    description: '',
+    image: ''
   });
 
-  const navigate = useNavigate();
-  
-  // Media queries for responsive design
-  const isMobile = useMediaQuery('(max-width:768px)');
+  const [sideNavOpen, setSideNavOpen] = useState(false);
+  const [toast, setToast] = useState({ open: false, message: '', severity: '' });
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    // Auto-close side nav on mobile
-    if (isMobile) {
-      setSideNavOpen(false);
-    }
-  }, [isMobile]);
+  const navigate = useNavigate();
+
+  const levels = ['Beginner', 'Intermediate', 'Advanced'];
 
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Restrict input for duration, price, and rating to numbers only
     if ((name === "duration" || name === "price" || name === "rating") && !/^\d*$/.test(value)) {
       return;
     }
 
-    setCourse({
-      ...course,
+    setCourseData({
+      ...courseData,
       [name]: value
+    });
+  };
+
+  const handleRatingChange = (event, newValue) => {
+    setCourseData({
+      ...courseData,
+      rating: newValue
     });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    
-    // Validate required fields
-    if (!course.title || !course.instructor || !course.price || !course.rating) {
+
+    if (!courseData.title || !courseData.instructor || !courseData.price || !courseData.rating) {
       showToast("Please fill in all required fields", "error");
       setLoading(false);
       return;
     }
-    
-    // Simulate API call
+
     setTimeout(() => {
       try {
-        // Get existing courses
         const existingCourses = JSON.parse(localStorage.getItem("courses")) || [];
-        
-        // Add new course
-        const updatedCourses = [...existingCourses, course];
-        
-        // Save to localStorage
+        const updatedCourses = [...existingCourses, courseData];
         localStorage.setItem("courses", JSON.stringify(updatedCourses));
-        
-        // Show success toast
         showToast("Course added successfully!", "success");
-        
-        // Reset form
-        setCourse({
+
+        setCourseData({
           title: "",
           description: "",
           instructor: "",
           duration: "",
           price: "",
           image: "",
-          rating: "" // Reset rating field
+          rating: 0
         });
-        
+
         setLoading(false);
-        
-        // Redirect after 2 seconds
+
         setTimeout(() => {
           navigate("/ViewCourse");
         }, 2000);
@@ -100,7 +101,6 @@ const AddCourse = () => {
     }, 1000);
   };
 
-  // Show toast message
   const showToast = (message, severity = "success") => {
     setToast({
       open: true,
@@ -109,7 +109,6 @@ const AddCourse = () => {
     });
   };
 
-  // Close toast message
   const handleCloseToast = (event, reason) => {
     if (reason === 'clickaway') {
       return;
@@ -121,28 +120,8 @@ const AddCourse = () => {
     <div className="view-course-layout">
       <CssBaseline />
 
-      {isMobile && (
-        <IconButton
-          className="menu-toggle"
-          onClick={() => setSideNavOpen(!sideNavOpen)}
-          color="primary"
-          size="large"
-          sx={{
-            backgroundColor: 'white',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
-            position: 'fixed',
-            top: '1rem',
-            left: sideNavOpen ? '240px' : '1rem',
-            transition: 'left 0.3s ease',
-            zIndex: 1100
-          }}
-        >
-          {sideNavOpen ? <FaChevronLeft /> : <FaBars />}
-        </IconButton>
-      )}
-
       <Drawer
-        variant={isMobile ? "temporary" : "permanent"}
+        variant="permanent"
         anchor="left"
         className={`side-nav ${sideNavOpen ? 'open' : ''}`}
         PaperProps={{ className: "side-nav-paper" }}
@@ -261,7 +240,7 @@ const AddCourse = () => {
                     value={courseData.level}
                     onChange={handleChange}
                   >
-                    {['Beginner', 'Intermediate', 'Advanced'].map(level => (
+                    {levels.map(level => (
                       <MenuItem key={level} value={level}>{level}</MenuItem>
                     ))}
                   </TextField>
@@ -297,133 +276,55 @@ const AddCourse = () => {
                     }}
                   />
                 </Grid>
-                
+
                 <Grid item xs={12} md={6}>
                   <TextField
                     name="image"
                     label="Video URL (Optional)"
                     variant="outlined"
                     fullWidth
-                    value={course.image}
+                    value={courseData.image}
                     onChange={handleChange}
                     className="form-field"
                   />
                 </Grid>
->>>>>>> Stashed changes
+              </Grid>
 
-        <form onSubmit={handleSubmit} className="course-form">
-          <TextField
-            fullWidth
-            label="Course Title"
-            name="title"
-            value={courseData.title}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
+              <TextField
+                fullWidth
+                label="Description"
+                name="description"
+                value={courseData.description}
+                onChange={handleChange}
+                required
+                margin="normal"
+                multiline
+                rows={4}
+              />
 
-          <TextField
-            fullWidth
-            label="Instructor Name"
-            name="instructor"
-            value={courseData.instructor}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Video URL"
-            name="video"
-            value={courseData.video}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Duration (in hours)"
-            name="duration"
-            type="number"
-            value={courseData.duration}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            select
-            label="Level"
-            name="level"
-            value={courseData.level}
-            onChange={handleChange}
-            required
-            margin="normal"
-          >
-            {levels.map((level) => (
-              <MenuItem key={level} value={level}>
-                {level}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <Box className="rating-box">
-            <Typography component="legend">Rating</Typography>
-            <Rating
-              name="rating"
-              value={courseData.rating}
-              onChange={handleRatingChange}
-              precision={0.5}
-            />
-          </Box>
-
-          <TextField
-            fullWidth
-            label="Price"
-            name="price"
-            type="number"
-            value={courseData.price}
-            onChange={handleChange}
-            required
-            margin="normal"
-          />
-
-          <TextField
-            fullWidth
-            label="Description"
-            name="description"
-            value={courseData.description}
-            onChange={handleChange}
-            required
-            margin="normal"
-            multiline
-            rows={4}
-          />
-
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className="submit-btn"
-            size="large"
-          >
-            Add Course
-          </Button>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className="submit-btn"
-            size="large"
-            onClick={() => navigate('/ViewCourse')}
-          >
-            View Courses
-          </Button>
-        </form>
-      </Paper>
-    </Container>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="submit-btn"
+                size="large"
+              >
+                Add Course
+              </Button>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className="submit-btn"
+                size="large"
+                onClick={() => navigate('/ViewCourse')}
+              >
+                View Courses
+              </Button>
+            </form>
+          </Paper>
+        </Container>
+      </main>
+    </div>
   );
 };
 
