@@ -131,6 +131,7 @@ const EditCourse = () => {
             ))}
           </TextField>
 
+<<<<<<< Updated upstream
           <Box className="rating-box">
             <Typography component="legend">Rating</Typography>
             <Rating
@@ -140,6 +141,49 @@ const EditCourse = () => {
               precision={0.5}
             />
           </Box>
+=======
+                <Grid item xs={12}>
+                  <TextField
+                    name="video"
+                    label="Video URL"
+                    variant="outlined"
+                    fullWidth
+                    value={courseData.video}
+                    onChange={handleChange}
+                    placeholder="e.g. https://example.com/video"
+                    className="form-field"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FaFolderOpen />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    name="price"
+                    label="Course Price"
+                    variant="outlined"
+                    fullWidth
+                    required
+                    value={courseData.price}
+                    onChange={handleChange}
+                    placeholder="e.g. 99.99"
+                    type="number"
+                    className="form-field"
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <FaMoneyBillWave />
+                        </InputAdornment>
+                      )
+                    }}
+                  />
+                </Grid>
+>>>>>>> Stashed changes
 
           <TextField
             fullWidth
