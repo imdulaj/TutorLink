@@ -114,12 +114,14 @@ export function Register() {
             <div className="form-group">
               <label htmlFor="stream">Stream</label>
               <select
+                
                 id="stream"
                 name="stream"
                 value={formData.stream}
                 onChange={handleChange}
                 required
                 className="selection"
+                style={{ width: '420px' }}
               >
                 <option value="">Select your stream</option>
                 <option value="science">Science</option>
